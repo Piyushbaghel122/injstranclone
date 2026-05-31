@@ -1,0 +1,14 @@
+node_modules/
+.env
+
+backend/node_modules/
+backend/.env
+
+frontend/node_modules/
+frontend/.next/
+frontend/.env
+frontend/.env.local
+
+admin/node_modules/
+admin/dist/
+admin/.env
