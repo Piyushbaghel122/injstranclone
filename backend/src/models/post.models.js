@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const postSchema = new mongoose.Schema({
-    capation:{
+    caption:{
         type: String,
         default: ""
   },
@@ -10,7 +10,7 @@ const postSchema = new mongoose.Schema({
         required: [true , "img url is required for creating an post"]
      },
      user: {
-        ref: "users",
+        ref: "User",
         type:mongoose.Schema.Types.ObjectId, 
         required: [ true , "user is is required for creating db"]
      }

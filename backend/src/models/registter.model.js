@@ -1,3 +1,18 @@
-import authModel from "./auth.models.js";
+import mongoose from "mongoose";
 
-export default authModel;
+const registerSchema = new mongoose.Schema(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+const registerModel =
+  mongoose.models.Register || mongoose.model("Register", registerSchema);
+
+export default registerModel;

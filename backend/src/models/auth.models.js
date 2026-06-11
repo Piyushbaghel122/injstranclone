@@ -26,6 +26,22 @@ const userSchema = new mongoose.Schema(
       unique: true,
       sparse: true,
     },
+    bio: String,
+    profileImage: {
+          type: String,
+          default: "https://ik.imagekit.io/h1wbrs8ns/"
+    },
+    followers: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    }],
+    following: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+
     resetPasswordToken: String,
     resetPasswordExpire: Date,
   },
@@ -33,6 +49,8 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+
 
 const authModel = mongoose.models.User || mongoose.model("User", userSchema);
 

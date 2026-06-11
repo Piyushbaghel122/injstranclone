@@ -1,16 +1,21 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Login from "../screens/Login";
+import Register from "../screens/regitser";
+import Phone from "../screens/Phone.jsx";
+import Feed from "../auth/pages/feed.jsx";
 
-function AppRoutes() {
+export default function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" />
-        <Route path="/api/auth/login" element={<Login />} />
-        <Route path="/home" element={<div>Welcome home</div>} />
+        <Route index element={<Navigate to="/login" replace />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/phone" element={<Phone />} />
+        <Route path="/otp" element={<Phone />} />
+        <Route path="/feed" element={<Feed />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>
   );
 }
-
-export default AppRoutes;

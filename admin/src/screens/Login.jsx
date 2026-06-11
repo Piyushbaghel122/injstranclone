@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "";
 
@@ -10,19 +11,6 @@ export default function Login() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    const savedUser = localStorage.getItem("user");
-
-    if (savedUser) {
-      try {
-        const user = JSON.parse(savedUser);
-        console.log(user.data)
-      } catch {
-        localStorage.removeItem("user");
-      }
-    }
-  }, []);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -63,6 +51,10 @@ export default function Login() {
     } finally {
       setIsLoading(false);
     }
+  }
+
+  function handleGoogleLogin() {
+    window.location.href = `${API_BASE_URL}/api/auth/google`;
   }
 
   return (
@@ -114,6 +106,14 @@ export default function Login() {
             {isLoading ? "Logging in..." : "Login"}
           </button>
         </form>
+
+        <button type="button" onClick={handleGoogleLogin} style={styles.googleButton}>
+          Sign in with Google
+        </button>
+
+        <p style={styles.footerText}>
+          Login with phone? <Link to="/phone" style={styles.link}>Send OTP</Link>
+        </p>
       </section>
     </main>
   );
@@ -125,17 +125,18 @@ const styles = {
     display: "grid",
     placeItems: "center",
     padding: "24px",
-    background: "#f6f7fb",
+    background:
+      "linear-gradient(135deg, #eef6ff 0%, #f8fbf5 48%, #fff4ed 100%)",
     boxSizing: "border-box",
   },
   panel: {
     width: "100%",
     maxWidth: "420px",
     padding: "32px",
-    border: "1px solid #e6e8ee",
+    border: "1px solid rgba(148, 163, 184, 0.32)",
     borderRadius: "8px",
-    background: "#ffffff",
-    boxShadow: "0 18px 45px rgba(15, 23, 42, 0.08)",
+    background: "rgba(255, 255, 255, 0.94)",
+    boxShadow: "0 24px 70px rgba(15, 23, 42, 0.12)",
     boxSizing: "border-box",
     textAlign: "left",
   },
@@ -151,7 +152,7 @@ const styles = {
     display: "grid",
     placeItems: "center",
     borderRadius: "8px",
-    background: "#111827",
+    background: "#0f172a",
     color: "#ffffff",
     fontSize: "22px",
     fontWeight: 700,
@@ -210,5 +211,28 @@ const styles = {
     margin: "4px 0 0",
     color: "#15803d",
     fontSize: "14px",
+  },
+  googleButton: {
+    width: "100%",
+    minHeight: "44px",
+    marginTop: "12px",
+    border: "1px solid #cbd5e1",
+    borderRadius: "6px",
+    color: "#111827",
+    background: "#ffffff",
+    fontSize: "15px",
+    fontWeight: 700,
+    cursor: "pointer",
+  },
+  footerText: {
+    marginTop: "18px",
+    color: "#64748b",
+    fontSize: "14px",
+    textAlign: "center",
+  },
+  link: {
+    color: "#2563eb",
+    fontWeight: 700,
+    textDecoration: "none",
   },
 };

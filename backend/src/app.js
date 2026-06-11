@@ -5,12 +5,18 @@ import routerAuth from "./router/auth.routes.js";
 import postRouter from "./router/post.routes.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import cors from "cors";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const adminDistPath = path.join(__dirname, "../../admin/dist");
 
 const app = express();
 
+
+app.use(cors({
+  credentials: true,
+  origin: "http://localhost:5173"
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookies());
@@ -22,5 +28,6 @@ app.use(express.static(adminDistPath));
 app.get(/.*/, (req, res) => {
   res.sendFile(path.join(adminDistPath, "index.html"));
 });
+
 
 export default app;

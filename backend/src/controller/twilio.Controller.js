@@ -37,6 +37,19 @@ function getDestination(body) {
   return body?.to || body?.phone;
 }
 
+async function saveVerificationStatus(destination, payload) {
+  try {
+    await redis.set(
+      `twilio:verify:${destination}`,
+      JSON.stringify(payload),
+      "EX",
+      600
+    );
+  } catch (error) {
+    console.warn("Redis OTP cache skipped:", error.message);
+  }
+}
+
 export async function sendPhoneVerification(req, res) {
   try {
     const destination = getDestination(req.body);
@@ -64,16 +77,11 @@ export async function sendPhoneVerification(req, res) {
         channel,
       });
 
-    await redis.set(
-      `twilio:verify:${destination}`,
-      JSON.stringify({
-        sid: verification.sid,
-        status: verification.status,
-        channel,
-      }),
-      "EX",
-      600
-    );
+    await saveVerificationStatus(destination, {
+      sid: verification.sid,
+      status: verification.status,
+      channel,
+    });
 
     return res.status(200).json({
       message: "Verification sent",
@@ -114,15 +122,10 @@ export async function checkPhoneVerification(req, res) {
         code,
       });
 
-    await redis.set(
-      `twilio:verify:${destination}`,
-      JSON.stringify({
-        sid: verificationCheck.sid,
-        status: verificationCheck.status,
-      }),
-      "EX",
-      600
-    );
+    await saveVerificationStatus(destination, {
+      sid: verificationCheck.sid,
+      status: verificationCheck.status,
+    });
 
     return res.status(200).json({
       message:
